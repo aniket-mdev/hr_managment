@@ -5,6 +5,7 @@ import (
 
 	"github.com/aniket-mdev/hr_managment/apis/dto"
 	"github.com/aniket-mdev/hr_managment/apis/services"
+	"github.com/aniket-mdev/hr_managment/logger"
 	"github.com/gin-gonic/gin"
 )
 
@@ -32,6 +33,8 @@ func (user_con *user_controller) CreateUser(ctx *gin.Context) {
 		})
 		return
 	}
+
+	logger.DebugLogger.Println("\n", req)
 
 	user, err_ := user_con.user_ser.CreateUser(req)
 
