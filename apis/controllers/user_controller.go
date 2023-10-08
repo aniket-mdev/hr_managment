@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/aniket-mdev/hr_managment/apis/dto"
+	"github.com/aniket-mdev/hr_managment/apis/helper"
 	"github.com/aniket-mdev/hr_managment/apis/services"
-	"github.com/aniket-mdev/hr_managment/logger"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,29 +27,20 @@ func (user_con *user_controller) CreateUser(ctx *gin.Context) {
 	var req dto.CreateUserRequestDTO
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"msg":   "failed to process",
-			"error": err,
-		})
+		response := helper.BuildFailedResponse(helper.FAILED_PROCESS, err.Error(), helper.EmptyObj{}, helper.USER_DATA)
+		ctx.JSON(http.StatusBadRequest, response)
 		return
 	}
 
-	logger.DebugLogger.Println("\n", req)
+	user, err := user_con.user_ser.CreateUser(req)
 
-	user, err_ := user_con.user_ser.CreateUser(req)
-
-	if err_ != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"msg":   "failed to process",
-			"error": err_.Error(),
-		})
+	if err != nil {
+		response := helper.BuildFailedResponse(helper.FAILED_PROCESS, err.Error(), helper.EmptyObj{}, helper.USER_DATA)
+		ctx.JSON(http.StatusInternalServerError, response)
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"msg":    "user account has been created",
-		"user":   user,
-		"status": true,
-	})
+	response := helper.BuildSuccessResponse(helper.USER_REGISTRATION_SUCCESS, user, helper.USER_DATA)
+	ctx.JSON(http.StatusOK, response)
 
 }

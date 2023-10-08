@@ -6,13 +6,14 @@ import (
 	"time"
 )
 
-var letters = "abcdefghijklmnopqrstuvxyz"
+var charset = "abcdefghijklmnopqrstuvwxyz"
 
 func generate_string(lenth int) (ans string) {
 
 	for len(ans) < lenth {
-		ans += string(letters[rand.Intn(len(letters))])
+		ans += string(charset[rand.Intn(len(charset))])
 	}
+
 	return
 }
 

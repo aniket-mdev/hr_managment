@@ -15,3 +15,6 @@ test:
 
 run:
 	go run application.go
+
+liveserver:
+	nodemon --exec go run application.go --signal SIGTERM
